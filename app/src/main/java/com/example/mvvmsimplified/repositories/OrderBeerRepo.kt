@@ -1,5 +1,6 @@
 package com.example.mvvmsimplified.repositories
 
+
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -7,15 +8,16 @@ import com.example.mvvmsimplified.rest.IGetBeerInfoAPI
 import com.example.mvvmsimplified.storage.BeerDao
 import com.example.mvvmsimplified.storage.BeerInfo
 import io.reactivex.Observable
+import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
+import io.reactivex.functions.BiFunction
 import io.reactivex.observers.DefaultObserver
 import io.reactivex.observers.DisposableObserver
-import io.reactivex.functions.Function
-
 import io.reactivex.schedulers.Schedulers
-
-
+import org.reactivestreams.Subscriber
+import org.reactivestreams.Subscription
 import javax.inject.Inject
 
 class OrderBeerRepo @Inject constructor() {
@@ -44,6 +46,17 @@ class OrderBeerRepo @Inject constructor() {
     }
 
 
+    fun demoFlowableBackPressure() {
+        iGetBeerInfoAPI.getBeerInfoFlowable().onBackpressureLatest()
+            .subscribeOn(Schedulers.newThread())
+            .observeOn(AndroidSchedulers.mainThread(),false,3)
+            .subscribe(getSubscriber())
+
+
+
+    }
+
+
     fun demoMapOperator() {
 
         iGetBeerInfoAPI.getBeerInfo().map { listOfBeerInfo -> convertToStringList(listOfBeerInfo)}
@@ -61,6 +74,76 @@ class OrderBeerRepo @Inject constructor() {
 //            .subscribe(getStringObserver())
 
     }
+
+    fun demoFlatMapOperator() {
+        iGetBeerInfoAPI.getBeerInfo()
+            .flatMap { listOfBeefInfo -> Observable.fromIterable(listOfBeefInfo) }
+            .flatMap { info -> Observable.just(info) }
+            .map { info -> convertToString(info) }
+            .filter { info -> info.startsWith("wild",true) }
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(getNameObserver())
+    }
+
+    fun demoSearch() {
+
+    }
+
+
+    fun demoZipOperator() {
+        Observable.zip(
+            Observable.just("Super","Extra"),
+            Observable.just("Wild Trail Pale Ale","Wild Night", "Wild country"),
+            BiFunction<String,String,String>{
+                t1, t2 -> t1.toUpperCase() +" " +t2.capitalize()
+            }).subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(getNameObserver())
+
+
+//        Observable.zip(
+//            Observable.just("Super","Extra"),
+//            Observable.just("Wild Trail Pale Ale","Wild Night"),
+//            object :BiFunction<String,String,String>{
+//                override fun apply(t1: String, t2: String): String {
+//                    return t1 + t2
+//                }
+//
+//            }).subscribeOn(Schedulers.io())
+//            .observeOn(AndroidSchedulers.mainThread())
+//            .subscribe(getNameObserver())
+    }
+
+
+    private fun convertToString(listOfBeerInfo: BeerInfo): String {
+        System.out.println("Thread name is " + Thread.currentThread().id)
+
+        return listOfBeerInfo.name
+    }
+
+    private fun getNameObserver() : Observer<String> {
+        return object : Observer<String> {
+
+            override fun onNext(t: String) {
+                Log.d("OrderBeerRepo Items are", t)
+            }
+
+            override fun onSubscribe(d: Disposable) {
+                Log.d("OrderBeerRepo", "onSubscribe")
+            }
+
+            override fun onComplete() {
+                Log.d("OrderBeerRepo", "onComplete")
+            }
+
+            override fun onError(e: Throwable) {
+                Log.d("OrderBeerRepo", "onError")
+            }
+
+        }
+    }
+
 
     private fun convertToStringList(listOfBeerInfo: List<BeerInfo>): List<String> {
         val stringList  = arrayListOf<String>()
@@ -139,6 +222,27 @@ class OrderBeerRepo @Inject constructor() {
         }
     }
 
+    fun getSubscriber() : Subscriber<List<BeerInfo>> {
+        return object : Subscriber<List<BeerInfo>> {
+            override fun onComplete() {
+                Log.d("OrderBeerRepo","Complete")
+            }
+
+            override fun onSubscribe(s: Subscription?) {
+                Log.d("OrderBeerRepo","")
+            }
+
+            override fun onNext(t: List<BeerInfo>) {
+                Log.d("OrderBeerRepo",t.size.toString())
+            }
+
+            override fun onError(t: Throwable?) {
+                Log.d("OrderBeerRepo",t.toString())
+            }
+
+        }
+    }
+
 
     private fun getOfflineObserver() : DisposableObserver<List<BeerInfo>> {
         return object :DisposableObserver<List<BeerInfo>>() {
@@ -169,5 +273,7 @@ class OrderBeerRepo @Inject constructor() {
     fun disposeElements(){
         if(null != disposable && !disposable.isDisposed) disposable.dispose()
     }
+
+
 
 }

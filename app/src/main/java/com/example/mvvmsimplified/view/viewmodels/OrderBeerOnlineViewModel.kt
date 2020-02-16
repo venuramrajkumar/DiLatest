@@ -15,8 +15,14 @@ class OrderBeerOnlineViewModel  @Inject constructor() : ViewModel(){
     lateinit var sampleData: SampleData
 
     fun initBeerInfo() {
-        orderBeerRepo.getBeerInfoApi()
-        orderBeerRepo.demoMapOperator()
+//        orderBeerRepo.getBeerInfoApi()
+//        orderBeerRepo.demoMapOperator()
+//        orderBeerRepo.demoFlatMapOperator()
+//        orderBeerRepo.demoZipOperator()
+
+        //Not working
+//            orderBeerRepo.demoFlowableBackPressure()
+
     }
 
     fun getBeerLiveData() : LiveData<List<BeerInfo>> { //Resource<>

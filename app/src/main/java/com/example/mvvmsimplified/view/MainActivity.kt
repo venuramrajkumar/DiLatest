@@ -34,6 +34,8 @@ class MainActivity : BaseActivity() {
         supportActionBar?.setTitle("RAJKUMAR")
         setSupportActionBar(toolbar)
 
+        mainActivityViewModel.demoPublishSubject()
+
         mainActivityViewModel.displayToast()
         orderBeer.setOnClickListener{ startActivity(Intent(this,OrderBeerOnlineActivity::class.java)) }
 
