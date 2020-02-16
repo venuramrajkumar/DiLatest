@@ -1,0 +1,8 @@
+<network-security-config>
+
+    <debug-overrides>
+        <trust-anchors>
+
+        </trust-anchors>
+    </debug-overrides>
+</network-security-config>
