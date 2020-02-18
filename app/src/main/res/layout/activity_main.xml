@@ -40,6 +40,7 @@
     <SearchView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:id="@+id/searchView"
             app:layout_anchor="@+id/contentMain"
             android:background="@android:color/holo_green_light"
             app:layout_anchorGravity="center" />

@@ -2,6 +2,8 @@ package com.example.mvvmsimplified.view
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.SearchView
+
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
 import com.example.mvvmsimplified.R
@@ -34,9 +36,14 @@ class MainActivity : BaseActivity() {
         supportActionBar?.setTitle("RAJKUMAR")
         setSupportActionBar(toolbar)
 
-        mainActivityViewModel.demoPublishSubject()
+//        mainActivityViewModel.demoPublishSubject()
+//        mainActivityViewModel.displayToast()
 
-        mainActivityViewModel.displayToast()
+        var searchView: SearchView = findViewById(R.id.searchView)
+
+        mainActivityViewModel.initSearch(RxSearchObservable.getSearchViewObservable(searchView))
+
+
         orderBeer.setOnClickListener{ startActivity(Intent(this,OrderBeerOnlineActivity::class.java)) }
 
 

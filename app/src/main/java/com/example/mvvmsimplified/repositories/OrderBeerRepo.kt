@@ -78,7 +78,7 @@ class OrderBeerRepo @Inject constructor() {
     fun demoFlatMapOperator() {
         iGetBeerInfoAPI.getBeerInfo()
             .flatMap { listOfBeefInfo -> Observable.fromIterable(listOfBeefInfo) }
-            .flatMap { info -> Observable.just(info) }
+//            .flatMap { info -> Observable.just(info) }
             .map { info -> convertToString(info) }
             .filter { info -> info.startsWith("wild",true) }
             .subscribeOn(Schedulers.io())
