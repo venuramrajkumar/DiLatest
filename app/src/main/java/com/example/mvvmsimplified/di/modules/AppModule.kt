@@ -11,11 +11,11 @@ import javax.inject.Singleton
 @Module
 class AppModule {
 
-    @Provides
-    @Singleton
-    fun getAppContext(app: MvvmSimplifiedApp) : Context {
-        return app
-    }
+//    @Provides
+//    @Singleton
+//    fun getAppContext(app: MvvmSimplifiedApp) : Context {
+//        return app
+//    }
 
 
 

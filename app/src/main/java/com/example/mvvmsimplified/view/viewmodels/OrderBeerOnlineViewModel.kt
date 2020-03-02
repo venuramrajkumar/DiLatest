@@ -15,7 +15,7 @@ class OrderBeerOnlineViewModel  @Inject constructor() : ViewModel(){
     lateinit var sampleData: SampleData
 
     fun initBeerInfo() {
-//        orderBeerRepo.getBeerInfoApi()
+        orderBeerRepo.getBeerInfoApi()
 //        orderBeerRepo.demoMapOperator()
 //        orderBeerRepo.demoFlatMapOperator()
 //        orderBeerRepo.demoZipOperator()

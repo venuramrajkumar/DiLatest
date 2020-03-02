@@ -7,7 +7,7 @@ import dagger.android.DaggerApplication
 
 class MvvmSimplifiedApp : DaggerApplication() {
     override fun applicationInjector(): AndroidInjector<out DaggerApplication> {
-        return  DaggerAppComponent.builder().application(this).build()
+        return  DaggerAppComponent.factory().create(this)
     }
 
     override fun onCreate() {

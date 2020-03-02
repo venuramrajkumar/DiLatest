@@ -14,17 +14,17 @@ import javax.inject.Singleton
 @Component (modules = [AppModule::class,AndroidSupportInjectionModule::class,ActivityBuilder::class])
 interface AppComponent : AndroidInjector<MvvmSimplifiedApp>{
 
-    @Component.Builder
-    interface Builder {
-
-        @BindsInstance
-        fun application(app:MvvmSimplifiedApp) : Builder
-        fun build():AppComponent
-    }
-
-//    @Component.Factory
-//    interface Factory {
-//    fun create(@BindsInstance applicationContext: Context): AppComponent
+//    @Component.Builder
+//    interface Builder {
+//
+//        @BindsInstance
+//        fun application(app:MvvmSimplifiedApp) : Builder
+//        fun build():AppComponent
 //    }
+
+    @Component.Factory
+    interface Factory {
+    fun create(@BindsInstance applicationContext: Context): AppComponent
+    }
 
 }
